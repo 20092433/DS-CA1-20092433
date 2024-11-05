@@ -85,3 +85,5 @@ const api = new apig.RestApi(this, "RecipeApi", {
   recipeEndpoint.addMethod("GET", new apig.LambdaIntegration(getRecipeByIdFn));
   recipeEndpoint.addMethod("DELETE", new apig.LambdaIntegration(deleteRecipeFn));
   
+}
+}

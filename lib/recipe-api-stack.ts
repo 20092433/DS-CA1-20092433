@@ -9,6 +9,7 @@ import * as iam from "aws-cdk-lib/aws-iam"; // For IAM policies (if you need it)
 
 
 export class RecipeApiStack extends cdk.Stack {
+
     constructor(scope: Construct, id: string, props?: cdk.StackProps) {
       super(scope, id, props);
 //tables
@@ -23,7 +24,7 @@ const recipesTable = new dynamodb.Table(this, "RecipesTable", {
   //lambda functions
   const getRecipeByIdFn = new lambdanode.NodejsFunction(this, "GetRecipeByIdFn", {
     runtime: lambda.Runtime.NODEJS_18_X,
-    entry: `${__dirname}/../lambdas/getRecipeById.ts`,
+    entry: `${__dirname}/../lambda/getRecipeById.ts`,
     environment: {
       TABLE_NAME: recipesTable.tableName,
     },
@@ -31,7 +32,7 @@ const recipesTable = new dynamodb.Table(this, "RecipesTable", {
   
   const getAllRecipesFn = new lambdanode.NodejsFunction(this, "GetAllRecipesFn", {
     runtime: lambda.Runtime.NODEJS_18_X,
-    entry: `${__dirname}/../lambdas/getAllRecipes.ts`,
+    entry: `${__dirname}/../lambda/getAllRecipes.ts`,
     environment: {
       TABLE_NAME: recipesTable.tableName,
     },
@@ -39,7 +40,7 @@ const recipesTable = new dynamodb.Table(this, "RecipesTable", {
   
   const addRecipeFn = new lambdanode.NodejsFunction(this, "AddRecipeFn", {
     runtime: lambda.Runtime.NODEJS_18_X,
-    entry: `${__dirname}/../lambdas/addRecipe.ts`,
+    entry: `${__dirname}/../lambda/addRecipe.ts`,
     environment: {
       TABLE_NAME: recipesTable.tableName,
     },
@@ -47,7 +48,7 @@ const recipesTable = new dynamodb.Table(this, "RecipesTable", {
   
   const deleteRecipeFn = new lambdanode.NodejsFunction(this, "DeleteRecipeFn", {
     runtime: lambda.Runtime.NODEJS_18_X,
-    entry: `${__dirname}/../lambdas/deleteRecipe.ts`,
+    entry: `${__dirname}/../lambda/deleteRecipe.ts`,
     environment: {
       TABLE_NAME: recipesTable.tableName,
     },

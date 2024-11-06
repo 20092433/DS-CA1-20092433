@@ -2,10 +2,13 @@ import { APIGatewayProxyHandlerV2 } from "aws-lambda";
 import { DynamoDBClient } from "@aws-sdk/client-dynamodb";
 import { DynamoDBDocumentClient, PutCommand } from "@aws-sdk/lib-dynamodb";
 
+//import addFormats from 'ajv-formats';
 import Ajv from "ajv";
 import schema from "../shared/types.schema.json"; // Ensure you have a schema for Recipe
 
 const ajv = new Ajv();
+
+//addFormats(ajv); // Add format support, including 'date-time'
 const isValidBodyParams = ajv.compile(schema.definitions["Recipe"] || {}); // Adapt the schema to match Recipe
 
 const ddbDocClient = createDDbDocClient();

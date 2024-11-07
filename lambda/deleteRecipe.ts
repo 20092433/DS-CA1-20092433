@@ -9,7 +9,8 @@ export const handler: APIGatewayProxyHandlerV2 = async (event, context) => {
     // Print Event
     console.log("[EVENT]", JSON.stringify(event));
     
-    const recipeId = event.pathParameters?.recipeId; // Change to recipeId
+    const recipeId = event.pathParameters?.recipeId ? parseInt(event.pathParameters.recipeId, 10) : undefined;
+
     if (!recipeId) {
       return {
         statusCode: 400,
@@ -24,7 +25,7 @@ export const handler: APIGatewayProxyHandlerV2 = async (event, context) => {
     const commandOutput = await ddbDocClient.send(
       new DeleteCommand({
         TableName: process.env.TABLE_NAME, // Make sure this is set for recipes
-        Key: { recipeId: recipeId }, // Update the key name to match your DynamoDB table
+        Key: { recipeId }, // Update the key name to match DynamoDB table
       })
     );
 

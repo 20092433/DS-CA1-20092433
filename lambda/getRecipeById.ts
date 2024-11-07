@@ -9,8 +9,9 @@ export const handler: APIGatewayProxyHandlerV2 = async (event, context) => {
     // Print Event
     console.log("[EVENT]", JSON.stringify(event));
 
-    const parameters = event?.pathParameters;
-    const recipeId = parameters?.recipeId ? parameters.recipeId : undefined;
+    const parameters = event.pathParameters;
+    //const recipeId = parameters && parameters.recipeId ? parseInt(parameters.recipeId) : undefined;
+    const recipeId = parameters?.recipeId ? parseInt(parameters.recipeId) : undefined
 
     if (!recipeId) {
       return {

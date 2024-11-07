@@ -6,6 +6,9 @@ import * as custom from "aws-cdk-lib/custom-resources"; // For custom resources
 import * as apig from "aws-cdk-lib/aws-apigateway"; // For API Gateway
 import { Construct } from "constructs"; // For CDK constructs
 import * as iam from "aws-cdk-lib/aws-iam"; // For IAM policies (if you need it)
+//import * as custom from "aws-cdk-lib/custom-resources";
+import { generateRecipeBatch } from "../shared/utils";
+import {recipes} from "../seed/recipes";
 
 
 export class RecipeApiStack extends cdk.Stack {
@@ -15,7 +18,7 @@ export class RecipeApiStack extends cdk.Stack {
 //tables
 const recipesTable = new dynamodb.Table(this, "RecipesTable", {
     billingMode: dynamodb.BillingMode.PAY_PER_REQUEST,
-    partitionKey: { name: "recipeId", type: dynamodb.AttributeType.STRING }, // or NUMBER, based on your design
+    partitionKey: { name: "recipeId", type: dynamodb.AttributeType.NUMBER }, // or NUMBER, based on your design
     removalPolicy: cdk.RemovalPolicy.DESTROY,
     tableName: "Recipes",
   });
@@ -53,6 +56,26 @@ const recipesTable = new dynamodb.Table(this, "RecipesTable", {
       TABLE_NAME: recipesTable.tableName,
     },
   });
+
+
+  new custom.AwsCustomResource(this, "recipesDbInitData", {
+    onCreate: {
+      service: "DynamoDB",
+      action: "batchWriteItem",
+      parameters: {
+        RequestItems: {
+          [recipesTable.tableName]: generateRecipeBatch(recipes),
+        },
+      },
+      physicalResourceId: custom.PhysicalResourceId.of("recipesDbInitData"),
+    },
+    
+
+    policy: custom.AwsCustomResourcePolicy.fromSdkCalls({
+      resources: [recipesTable.tableArn],
+    }),
+  });
+  
   
 
 
@@ -79,12 +102,12 @@ const api = new apig.RestApi(this, "RecipeApi", {
   
   const recipesEndpoint = api.root.addResource("recipes");
   
-  recipesEndpoint.addMethod("GET", new apig.LambdaIntegration(getAllRecipesFn));
-  recipesEndpoint.addMethod("POST", new apig.LambdaIntegration(addRecipeFn));
+  recipesEndpoint.addMethod("GET", new apig.LambdaIntegration(getAllRecipesFn, { proxy: true }));
+  recipesEndpoint.addMethod("POST", new apig.LambdaIntegration(addRecipeFn, { proxy: true }));
   
   const recipeEndpoint = recipesEndpoint.addResource("{recipeId}");
-  recipeEndpoint.addMethod("GET", new apig.LambdaIntegration(getRecipeByIdFn));
-  recipeEndpoint.addMethod("DELETE", new apig.LambdaIntegration(deleteRecipeFn));
+  recipeEndpoint.addMethod("GET", new apig.LambdaIntegration(getRecipeByIdFn, { proxy: true }));
+  recipeEndpoint.addMethod("DELETE", new apig.LambdaIntegration(deleteRecipeFn, { proxy: true }));
   
 }
 }

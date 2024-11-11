@@ -1,14 +1,30 @@
-# Welcome to your CDK TypeScript project
+## Serverless REST Assignment - Distributed Systems.
 
-This is a blank project for CDK development with TypeScript.
+__Name: Adam McNamara
 
-The `cdk.json` file tells the CDK Toolkit how to execute your app.
+__Demo: https://youtu.be/6ZMEI_4YoYw
 
-## Useful commands
+### Context.
 
-* `npm run build`   compile typescript to js
-* `npm run watch`   watch for changes and compile
-* `npm run test`    perform the jest unit tests
-* `cdk deploy`      deploy this stack to your default AWS account/region
-* `cdk diff`        compare deployed stack with current state
-* `cdk synth`       emits the synthesized CloudFormation template
+For this assignment the context of my web API is recipes I used the cognito lab as a base as I hoped to intergrate it with my recipe stack, I populated the database with seed data that deployed a number  of recipes in the dynamoDB table when the stack is deployed, the attributes stored for recipe in the dynamoDB table are:
+
+title: Name of the recipe
+Instructions: How to cook using the recipe
+RecipeID: Unique identifier of the recipe
+Ingredients: Individual food needed to make up a recipe.
+Cookingtime: Amount of time needed to cook up the recipe.
+
+
+I attempted to add authentication with my recipe table but was unsuccessful.
+
+### App API endpoints.
+
+
+
+GET /recipes - retrieve all recipes
+POST /recipes - add a new recipe
+GET /recipes/{recipeID} - retrieve a recipe with a specific ID
+DELETE /recipes/{recipeID} - delete a recipe with a specific ID
+
+
+

@@ -21,9 +21,9 @@ I attempted to add authentication with my recipe table but was unsuccessful.
 
 
 
-GET /recipes - retrieve all recipes
-POST /recipes - add a new recipe
-GET /recipes/{recipeID} - retrieve a recipe with a specific ID
+GET /recipes - retrieve all recipes,
+POST /recipes - add a new recipe,
+GET /recipes/{recipeID} - retrieve a recipe with a specific ID,
 DELETE /recipes/{recipeID} - delete a recipe with a specific ID
 
 
